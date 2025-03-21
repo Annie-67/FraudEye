@@ -1,0 +1,232 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-4">
+        <h1 class="text-center text-3xl font-bold mt-5">Fraud Detection Dashboard</h1>
+
+        <!-- Filter Section -->
+        <div class="flex flex-wrap mt-4">
+            <div class="w-full md:w-1/3 p-2">
+                <label for="transaction-id" class="block text-sm font-medium">Transaction ID:</label>
+                <input type="text" id="transaction-id" class="form-input mt-1 block w-full bg-gray-800 text-white border-gray-700" placeholder="Search by Transaction ID">
+            </div>
+            <div class="w-full md:w-1/3 p-2">
+                <label class="block text-sm font-medium">Filter By:</label>
+                <div class="flex space-x-2 mt-1">
+                    <button type="button" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="to-filter-btn">To (Debited)</button>
+                    <button type="button" class="btn bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" id="from-filter-btn">From (Credited)</button>
+                    <button type="button" class="btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" id="naah-filter-btn">Naah</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Raw Transaction Table -->
+        <div class="mt-4">
+            <h4 class="text-xl font-bold">Raw Transaction Data</h4>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-gray-800 text-white">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Transaction ID</th>
+                            <th class="px-4 py-2">From (Credited)</th>
+                            <th class="px-4 py-2">To (Debited)</th>
+                            <th class="px-4 py-2">Amount</th>
+                            <th class="px-4 py-2">Is Fraud Predicted</th>
+                            <th class="px-4 py-2">Is Fraud Reported</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-table-body">
+                        <!-- Dynamic data will be inserted here via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Fraud Prediction and Report Comparison -->
+        <div class="flex flex-wrap mt-4">
+            <div class="w-full md:w-1/2 p-2">
+                <h4 class="text-xl font-bold">Fraud Predictions vs Reports Comparison</h4>
+                <canvas id="fraud-comparison-chart"></canvas>
+            </div>
+            <div class="w-full md:w-1/2 p-2">
+                <h4 class="text-xl font-bold">Fraud Trend Over Time</h4>
+                <canvas id="fraud-time-series-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Fraud Report Reason Donut Chart -->
+        <div class="flex flex-wrap mt-4">
+            <div class="w-full md:w-1/2 p-2">
+                <h4 class="text-xl font-bold">Fraud Report Reasons</h4>
+                <div class="relative w-80 h-80 mx-auto">
+                    <canvas id="fraud-reason-donut-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch transaction data (simulated)
+        function fetchTransactionData(filterType) {
+            const transactionId = $('#transaction-id').val();
+
+            $.ajax({
+                url: `/all_transactions`,  // API endpoint for fetching transactions
+                method: 'GET',
+                success: function(data) {
+                    const filteredData = data.filter(transaction => {
+                        if (filterType === "to") {
+                            return transaction.transaction_id.includes(transactionId) && transaction.to.includes($('#transaction-id').val());
+                        } else if (filterType === "from") {
+                            return transaction.transaction_id.includes(transactionId) && transaction.from.includes($('#transaction-id').val());
+                        } else {
+                            return transaction.transaction_id.includes(transactionId);
+                        }
+                    });
+
+                    const tableBody = $('#transaction-table-body');
+                    tableBody.empty();  // Clear existing rows
+                    filteredData.forEach(transaction => {
+                        tableBody.append(`
+                            <tr>
+                                <td class="border px-4 py-2">${transaction.transaction_id}</td>
+                                <td class="border px-4 py-2">${transaction.from}</td>
+                                <td class="border px-4 py-2">${transaction.to}</td>
+                                <td class="border px-4 py-2">${transaction.amount}</td>
+                                <td class="border px-4 py-2">${transaction.is_fraud ? 'Yes' : 'No'}</td>
+                                <td class="border px-4 py-2">${transaction.reported_by_user ? 'Yes' : 'No'}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+        }
+
+        // Function to create fraud comparison chart
+        function createFraudComparisonChart() {
+            const ctx = document.getElementById('fraud-comparison-chart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Transaction Channel', 'Payment Mode', 'Gateway Bank'],
+                    datasets: [{
+                        label: 'Predicted Frauds',
+                        data: [12, 19, 3], 
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Reported Frauds',
+                        data: [5, 9, 1], 
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to create fraud time series chart
+        function createFraudTimeSeriesChart() {
+            const ctx = document.getElementById('fraud-time-series-chart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April'],
+                    datasets: [{
+                        label: 'Predicted Frauds',
+                        data: [12, 19, 3, 5], 
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Reported Frauds',
+                        data: [5, 9, 1, 4], 
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Frauds'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to create fraud reason donut chart
+        function createFraudReasonDonutChart() {
+            const ctx = document.getElementById('fraud-reason-donut-chart').getContext('2d');
+
+            // Simulated data from CSV for fraud reasons (manual_fraud_label column)
+            const fraudReasons = {
+                'high_amount_mobile': 25,
+                'weird_browser_low_mode': 20,
+                'missing_mobile_number': 5
+            };
+
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(fraudReasons),
+                    datasets: [{
+                        label: 'Fraud Reasons',
+                        data: Object.values(fraudReasons),
+                        backgroundColor: ['#FF9999', '#66B2FF', '#99FF99'],
+                        borderColor: ['#FF6666', '#3399FF', '#66FF66'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+
+        // Initialize charts and fetch transaction data on page load
+        $(document).ready(function() {
+            createFraudComparisonChart();
+            createFraudTimeSeriesChart();
+            createFraudReasonDonutChart();
+
+            $('#to-filter-btn').click(function() {
+                fetchTransactionData("to");
+            });
+
+            $('#from-filter-btn').click(function() {
+                fetchTransactionData("from");
+            });
+
+            $('#naah-filter-btn').click(function() {
+                fetchTransactionData("naah");
+            });
+        });
+    </script>
+</body>
+</html>

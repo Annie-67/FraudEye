@@ -1,0 +1,113 @@
+[
+    {
+      "transaction_id_anonymous": "ANON_1",
+      "transaction_amount": 15000,
+      "transaction_channel": "mobile",
+      "transaction_payment_mode_anonymous": 1,
+      "payment_gateway_bank_anonymous": 3,
+      "payer_browser_anonymous": 10,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_2",
+      "transaction_amount": 2000,
+      "transaction_channel": "web",
+      "transaction_payment_mode_anonymous": 2,
+      "payment_gateway_bank_anonymous": 4,
+      "payer_browser_anonymous": 8,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_3",
+      "transaction_amount": 5000,
+      "transaction_channel": "mobile",
+      "transaction_payment_mode_anonymous": 0,
+      "payment_gateway_bank_anonymous": 2,
+      "payer_browser_anonymous": 12,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_4",
+      "transaction_amount": 3000,
+      "transaction_channel": "web",
+      "transaction_payment_mode_anonymous": 1,
+      "payment_gateway_bank_anonymous": 5,
+      "payer_browser_anonymous": 7,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_5",
+      "transaction_amount": 11000,
+      "transaction_channel": "mobile",
+      "transaction_payment_mode_anonymous": 2,
+      "payment_gateway_bank_anonymous": 6,
+      "payer_browser_anonymous": 11,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_6",
+      "transaction_amount": 1800,
+      "transaction_channel": "web",
+      "transaction_payment_mode_anonymous": 1,
+      "payment_gateway_bank_anonymous": 1,
+      "payer_browser_anonymous": 5,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_7",
+      "transaction_amount": 7500,
+      "transaction_channel": "web",
+      "transaction_payment_mode_anonymous": 1,
+      "payment_gateway_bank_anonymous": 8,
+      "payer_browser_anonymous": 6,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "Unknown",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_8",
+      "transaction_amount": 9500,
+      "transaction_channel": "mobile",
+      "transaction_payment_mode_anonymous": 0,
+      "payment_gateway_bank_anonymous": 2,
+      "payer_browser_anonymous": 12,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_9",
+      "transaction_amount": 12000,
+      "transaction_channel": "mobile",
+      "transaction_payment_mode_anonymous": 0,
+      "payment_gateway_bank_anonymous": 9,
+      "payer_browser_anonymous": 12,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    },
+    {
+      "transaction_id_anonymous": "ANON_10",
+      "transaction_amount": 3500,
+      "transaction_channel": "web",
+      "transaction_payment_mode_anonymous": 2,
+      "payment_gateway_bank_anonymous": 5,
+      "payer_browser_anonymous": 3,
+      "payer_email_anonymous": "normaluser@example.com",
+      "payer_mobile_anonymous": "XXXXX111.0",
+      "payee_id_anonymous": "ANON_0"
+    }
+  ]
+  
